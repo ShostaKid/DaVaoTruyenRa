@@ -186,7 +186,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .about-wrap,
   .reading-wrap { padding: 2rem 1.2rem; }
   .works-layout { flex-direction: column; }
-  .fandom-sidebar { width: 100%; flex-direction: row; overflow-x: auto; position: static; }
+  .fandom-sidebar { display: none; }
+  #mobile-filter-toggle { display: flex; }
+  #mobile-filter-panel { display: none; }
+  #mobile-filter-panel.open { display: block; }
   .filter-btn { width: auto; white-space: nowrap; }
   .hero { padding: 3rem 1.2rem; }
   .hero-title { font-size: 1.8rem; letter-spacing: 3px; }
@@ -203,6 +206,47 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   flex: 1;
   min-width: 0;
 }
+/* ACCORDION SIDEBAR */
+.accordion-item{margin-bottom:4px;}
+.accordion-header{width:100%;display:flex!important;justify-content:space-between;align-items:center;}
+.acc-arrow{font-size:0.6rem;transition:transform 0.25s;opacity:0.6;}
+.accordion-item.open .acc-arrow{transform:rotate(180deg);}
+.accordion-ships{max-height:0;overflow:hidden;transition:max-height 0.3s ease,margin 0.2s ease;display:flex;flex-direction:column;gap:3px;}
+.accordion-item.open .accordion-ships{max-height:500px;margin:4px 0 6px 8px;padding-left:10px;border-left:2px solid var(--border);}
+.accordion-ships .ship-btn{color:var(--ink2);font-size:0.58rem;padding:5px 10px;border-color:transparent;letter-spacing:1.5px;}
+.accordion-ships .ship-btn:hover,.accordion-ships .ship-btn.active{color:var(--gold);border-color:var(--gold);}
+.tag.clickable{cursor:pointer;transition:all 0.15s;}
+.tag.clickable:hover{border-color:var(--gold);color:var(--gold-dark);background:rgba(184,151,42,0.08);}
+
+/* MOBILE FILTER */
+#mobile-filter-toggle{display:none;align-items:center;justify-content:space-between;width:100%;background:none;border:1px solid var(--border);padding:10px 16px;font-family:'Nunito',sans-serif;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink2);cursor:pointer;margin-bottom:0;transition:all 0.2s;}
+#mobile-filter-toggle:hover,#mobile-filter-toggle.open{border-color:var(--gold);color:var(--gold);}
+#mobile-filter-toggle .toggle-arrow{transition:transform 0.2s;}
+#mobile-filter-toggle.open .toggle-arrow{transform:rotate(180deg);}
+#mobile-filter-panel{border:1px solid var(--border);border-top:none;padding:1rem;margin-bottom:1.5rem;background:var(--cream);display:none;}
+#mobile-filter-panel.open{display:block;}
+.mobile-filter-section{margin-bottom:1rem;}
+.mobile-filter-section:last-child{margin-bottom:0;}
+.mobile-filter-label{font-family:'Nunito',sans-serif;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.6rem;display:block;}
+.mobile-filter-pills{display:flex;flex-wrap:wrap;gap:6px;}
+.mobile-pill{font-family:'Nunito',sans-serif;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:5px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.mobile-pill:hover,.mobile-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+#mobile-filter-count{color:var(--gold);}
+
+/* COMMENT SECTION */
+.comment-form input,.comment-form textarea{width:100%;background:var(--cream2);border:1px solid var(--border);padding:10px 14px;font-family:'Lora',Georgia,serif;font-size:0.95rem;color:var(--ink);margin-bottom:0.6rem;resize:vertical;box-sizing:border-box;}
+.comment-form input:focus,.comment-form textarea:focus{outline:none;border-color:var(--gold);}
+.comment-form input::placeholder,.comment-form textarea::placeholder{color:var(--ink3);font-style:italic;}
+.comment-item{padding:1rem 0;border-bottom:1px solid var(--border);}
+.comment-item:last-child{border-bottom:none;}
+.comment-head{display:flex;align-items:baseline;gap:0.8rem;margin-bottom:0.4rem;}
+.comment-author{font-family:'Nunito',sans-serif;font-size:0.78rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);}
+.comment-date{font-size:0.72rem;color:var(--ink3);font-style:italic;}
+.comment-body-text{font-size:0.95rem;line-height:1.6;color:var(--ink2);white-space:pre-wrap;word-break:break-word;}
+.comments-empty{text-align:center;font-style:italic;color:var(--ink3);padding:1.5rem 0;font-size:0.9rem;}
+[data-theme="dark"] #mobile-filter-panel{background:var(--cream);}
+[data-theme="dark"] .comment-form input,[data-theme="dark"] .comment-form textarea{background:var(--cream2);}
+
 #search-input:focus{border-color:var(--gold);}
 #search-input::placeholder{color:var(--ink3);}
 </style>
@@ -279,13 +323,30 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
       <aside class="fandom-sidebar">
         <div class="sidebar-heading">Fandom</div>
-        <button class="filter-btn active" onclick="filterFics('all',this)">All</button>
-        <button class="filter-btn" onclick="filterFics('Reverse: 1999',this)">Reverse: 1999</button>
-        <button class="filter-btn" onclick="filterFics('Figure Skating',this)">Figure Skating RPF</button>
-        <button class="filter-btn" onclick="filterFics('Honkai',this)">Honkai: Star Rail</button>
+        <button class="filter-btn all-btn active" onclick="setFandom('all',this)">Tất cả</button>
+        <div id="fandom-accordion"></div>
       </aside>
 
       <div class="works-main">
+        <button id="mobile-filter-toggle" onclick="toggleMobileFilter()">
+          <span>Lọc <span id="mobile-filter-count"></span></span>
+          <span class="toggle-arrow">▾</span>
+        </button>
+        <div id="mobile-filter-panel">
+          <div class="mobile-filter-section">
+            <span class="mobile-filter-label">Fandom</span>
+            <div class="mobile-filter-pills">
+              <button class="mobile-pill active" onclick="setFandom('all',this,true)">Tất cả</button>
+              <button class="mobile-pill" onclick="setFandom('Reverse: 1999',this,true)">Reverse: 1999</button>
+              <button class="mobile-pill" onclick="setFandom('Figure Skating',this,true)">Figure Skating RPF</button>
+              <button class="mobile-pill" onclick="setFandom('Honkai',this,true)">Honkai: Star Rail</button>
+            </div>
+          </div>
+          <div class="mobile-filter-section">
+            <span class="mobile-filter-label">Ship</span>
+            <div class="mobile-filter-pills" id="mobile-ship-list"></div>
+          </div>
+        </div>
         <div style="margin-bottom:1.5rem;position:relative;">
   <input id="search-input" type="text" placeholder="Tìm theo tên truyện..."
     oninput="searchFics(this.value)"
@@ -390,6 +451,24 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <div id="reading-footer" style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;display:none;">
         <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank"> Đọc trên Ao3 →</a>
       </div>
+      <!-- COMMENT SECTION -->
+      <div id="comments-wrap" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:none;">
+        <button onclick="toggleComments()" style="font-family:'Nunito',sans-serif;font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:1rem;width:100%;padding:0;">
+          <span id="comments-label">Hiện bình luận</span>
+          <span style="flex:1;height:1px;background:var(--border);display:block;"></span>
+          <span id="comments-arrow">▼</span>
+        </button>
+        <div id="comments-body" style="display:none;margin-top:1.5rem;">
+          <div class="comment-form">
+            <input type="text" id="comment-name" placeholder="Tên (không bắt buộc)" maxlength="50">
+            <textarea id="comment-text" placeholder="Để lại bình luận..." rows="3" maxlength="2000"></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:0.6rem;">
+              <button class="ao3-link" id="comment-submit" onclick="submitComment()">Gửi bình luận →</button>
+            </div>
+          </div>
+          <div id="comments-list" style="margin-top:1.5rem;"></div>
+        </div>
+      </div>
     </div>
     <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; Kiểu nó phải thế &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
@@ -401,7 +480,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <div class="section-heading" style="margin-top:1rem;">Giới thiệu</div>
       <div class="about-body">
         <p>Xin chào, chắc là một số người đã từng biết tới tôi qua cái tên "Đá vào truyện ra", cơ mà từ giờ tôi sẽ viết dưới cái tên <strong>ShostaKid</strong>, còn tên này nghĩa là gì thì các bạn có thể thể tự tra Google hoặc ChatGPT:)</p>
-        <p>Tôi viết mọi thứ tôi thích, làm mọi thứ tôi muốn ở đây. Đừng hỏi tại sao vì tôi thích thế:) (Web này là web Frontend không Database nên yên tâm k có phần comment để các bạn ném đá đâu)</p>
+        <p>Tôi viết mọi thứ tôi thích, làm mọi thứ tôi muốn ở đây. Đừng hỏi tại sao vì tôi thích thế:) Đọc xong thích thì comment cho tôi biết nhé!</p>
         <p>Tôi chủ yếu viết cho vài fandom như <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> và đôi khi có cả <em>Genshin Impact</em>. Sau này thêm cái gì sẽ bổ sung sau</p>
         <p>Không có gì nhiều để nói và giới thiệu nữa, nên thôi chúc các bạn tìm thấy được thứ gì đó thú vị ở đây. Cảm ơn vi da den</p>
       </div>
@@ -588,13 +667,158 @@ window.addEventListener('scroll', () => {
   bar.style.width = pct + '%';
 });
 
-// --- Fandom filter ---
-function filterFics(keyword, btn) {
-  document.querySelectorAll('.fandom-sidebar .filter-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+// --- State ---
+let activeFandom = 'all';
+let activeShips = new Set();
+let musicGeneration = 0;
+
+// --- Fandom + Ship filter ---
+function applyFilters() {
   document.querySelectorAll('#page-works .fic-card').forEach(card => {
-    card.style.display = (keyword === 'all' || (card.dataset.fandom || '').includes(keyword)) ? 'block' : 'none';
+    const fandomOk = activeFandom === 'all' || (card.dataset.fandom || '').includes(activeFandom);
+    const shipOk = activeShips.size === 0 || [...activeShips].some(s =>
+      [...card.querySelectorAll('.tag')].some(t => t.textContent.trim() === s)
+    );
+    card.style.display = (fandomOk && shipOk) ? 'block' : 'none';
   });
+}
+
+function setFandom(fandom, btn, isMobile) {
+  activeFandom = fandom;
+  if (fandom === 'all') {
+    document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
+    document.querySelector('.all-btn')?.classList.add('active');
+  } else {
+    document.querySelector('.all-btn')?.classList.remove('active');
+  }
+  document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
+    const inShip = document.getElementById('mobile-ship-list')?.contains(b);
+    if (!inShip) {
+      b.classList.toggle('active', fandom === 'all' ? b.textContent.trim() === 'Tất cả' : b.textContent.includes(fandom));
+    }
+  });
+  if (btn) btn.classList.add('active');
+  activeShips.clear();
+  document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => b.classList.remove('active'));
+  updateMobileFilterCount();
+  applyFilters();
+}
+
+function toggleShip(ship, btn, isMobile) {
+  if (activeShips.has(ship)) { activeShips.delete(ship); btn.classList.remove('active'); }
+  else { activeShips.add(ship); btn.classList.add('active'); }
+  const counterpart = isMobile
+    ? document.querySelector(`.ship-btn:not(.mobile-pill)`)
+    : document.querySelector(`#mobile-ship-list .mobile-pill`);
+  document.querySelectorAll(`.ship-btn, #mobile-ship-list .mobile-pill`).forEach(b => {
+    if (b.textContent.trim() === ship) b.classList.toggle('active', activeShips.has(ship));
+  });
+  updateMobileFilterCount();
+  applyFilters();
+}
+
+function buildSidebar() {
+  const fandomLabels = {
+    'Reverse: 1999': 'Reverse: 1999',
+    'Figure Skating': 'Figure Skating RPF',
+    'Honkai': 'Honkai: Star Rail'
+  };
+  const fandomShips = {};
+  document.querySelectorAll('#page-works .fic-card').forEach(card => {
+    const fandom = card.dataset.fandom;
+    if (!fandom) return;
+    if (!fandomShips[fandom]) fandomShips[fandom] = new Set();
+    card.querySelectorAll('.tag').forEach(tag => fandomShips[fandom].add(tag.textContent.trim()));
+  });
+
+  const accordion = document.getElementById('fandom-accordion');
+  if (accordion) {
+    accordion.innerHTML = '';
+    Object.entries(fandomShips).forEach(([fandom, ships]) => {
+      const label = fandomLabels[fandom] || fandom;
+      const item = document.createElement('div');
+      item.className = 'accordion-item';
+      item.dataset.fandom = fandom;
+      const header = document.createElement('button');
+      header.className = 'filter-btn accordion-header';
+      header.innerHTML = `<span>${label}</span><span class="acc-arrow">▾</span>`;
+      header.onclick = () => toggleAccordion(item, fandom);
+      const shipsDiv = document.createElement('div');
+      shipsDiv.className = 'accordion-ships';
+      [...ships].sort().forEach(ship => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn ship-btn';
+        btn.textContent = ship;
+        btn.onclick = () => toggleShip(ship, btn);
+        shipsDiv.appendChild(btn);
+      });
+      item.appendChild(header);
+      item.appendChild(shipsDiv);
+      accordion.appendChild(item);
+    });
+  }
+
+  const mobileShipList = document.getElementById('mobile-ship-list');
+  if (mobileShipList) {
+    mobileShipList.innerHTML = '';
+    const allShips = new Set();
+    Object.values(fandomShips).forEach(s => s.forEach(v => allShips.add(v)));
+    [...allShips].sort().forEach(ship => {
+      const btn = document.createElement('button');
+      btn.className = 'mobile-pill';
+      btn.textContent = ship;
+      btn.onclick = () => toggleShip(ship, btn, true);
+      mobileShipList.appendChild(btn);
+    });
+  }
+
+  document.querySelectorAll('#page-works .fic-card .tag').forEach(tag => {
+    tag.classList.add('clickable');
+    tag.onclick = (e) => {
+      e.stopPropagation();
+      const ship = tag.textContent.trim();
+      if (currentPage !== 'works') showPage('works', document.querySelector('.nav-links a:nth-child(2)'));
+      activeShips.clear();
+      activeShips.add(ship);
+      document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => {
+        b.classList.toggle('active', b.textContent.trim() === ship);
+      });
+      updateMobileFilterCount();
+      applyFilters();
+      window.scrollTo(0,0);
+    };
+  });
+}
+
+function toggleAccordion(item, fandom) {
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) {
+    item.classList.add('open');
+    activeFandom = fandom;
+    document.querySelector('.all-btn')?.classList.remove('active');
+  } else {
+    activeFandom = 'all';
+    document.querySelector('.all-btn')?.classList.add('active');
+  }
+  activeShips.clear();
+  document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => b.classList.remove('active'));
+  updateMobileFilterCount();
+  applyFilters();
+}
+
+function toggleMobileFilter() {
+  const toggle = document.getElementById('mobile-filter-toggle');
+  const panel = document.getElementById('mobile-filter-panel');
+  toggle.classList.toggle('open');
+  panel.classList.toggle('open');
+}
+
+function updateMobileFilterCount() {
+  const count = document.getElementById('mobile-filter-count');
+  if (!count) return;
+  const n = (activeFandom !== 'all' ? 1 : 0) + activeShips.size;
+  count.textContent = n > 0 ? `(${n})` : '';
 }
 
 // --- Home page: auto-render từ fics[] ---
@@ -737,6 +961,7 @@ function openFic(i) {
   window.scrollTo(0,0);
   loadChapter(i, 0);
   playMusic(i, 0);
+  loadComments(i);
 }
 
 function enterSite() {
@@ -751,6 +976,7 @@ document.addEventListener('DOMContentLoaded', () => {
   intro.addEventListener('click', enterSite);
   document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
   renderHome();
+  buildSidebar();
 });
 
 // =============================================
@@ -869,6 +1095,7 @@ function playMusicDirect(source, url, id, start, end, name) {
 }
 
 function stopMusic() {
+  musicGeneration++;
   ['yt-player', 'sc-player', 'audio-player'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.remove();
@@ -948,6 +1175,97 @@ window.addEventListener('load', () => {
     if (!isNaN(idx) && fics[idx]) openFic(idx);
   }
 });
+
+// =============================================
+// COMMENTS — Supabase
+// =============================================
+const SUPABASE_URL = 'https://ggbahdhmtgaemgblfdum.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnYmFoZGhtdGdhZW1nYmxmZHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwODQ1MTIsImV4cCI6MjA5NjY2MDUxMn0.AnSfFDdzzEaKB19cgODcoUm1Fkq2epU55ryNi_si64w';
+
+function loadComments(ficIdx) {
+  const wrap = document.getElementById('comments-wrap');
+  if (!wrap) return;
+  wrap.style.display = 'block';
+  document.getElementById('comments-body').style.display = 'none';
+  document.getElementById('comments-label').textContent = 'Hiện bình luận';
+  document.getElementById('comments-arrow').textContent = '▼';
+  document.getElementById('comments-list').innerHTML = '';
+  document.getElementById('comment-name').value = '';
+  document.getElementById('comment-text').value = '';
+}
+
+function toggleComments() {
+  const body = document.getElementById('comments-body');
+  const label = document.getElementById('comments-label');
+  const arrow = document.getElementById('comments-arrow');
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  label.textContent = isHidden ? 'Ẩn bình luận' : 'Hiện bình luận';
+  arrow.textContent = isHidden ? '▲' : '▼';
+  if (isHidden) fetchComments();
+}
+
+async function fetchComments() {
+  const list = document.getElementById('comments-list');
+  list.innerHTML = '<div class="comments-empty">Đang tải…</div>';
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/comments?fic_id=eq.vi-fic-${currentFic}&order=created_at.desc&select=*`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    if (!res.ok) throw new Error();
+    const comments = await res.json();
+    if (comments.length === 0) {
+      list.innerHTML = '<div class="comments-empty">Chưa có bình luận nào. Bạn là người đầu tiên ♪</div>';
+      return;
+    }
+    list.innerHTML = comments.map(c => {
+      const name = escapeHtml(c.name || 'Ẩn danh');
+      const body = escapeHtml(c.body);
+      const date = new Date(c.created_at).toLocaleDateString('vi-VN', { day: 'numeric', month: 'long', year: 'numeric' });
+      return `<div class="comment-item">
+        <div class="comment-head">
+          <span class="comment-author">${name}</span>
+          <span class="comment-date">${date}</span>
+        </div>
+        <div class="comment-body-text">${body}</div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div class="comments-empty">Không thể tải bình luận.</div>';
+  }
+}
+
+async function submitComment() {
+  const nameInput = document.getElementById('comment-name');
+  const textInput = document.getElementById('comment-text');
+  const submitBtn = document.getElementById('comment-submit');
+  const body = textInput.value.trim();
+  if (!body) { textInput.focus(); return; }
+  const name = nameInput.value.trim() || 'Ẩn danh';
+  submitBtn.textContent = 'Đang gửi…';
+  submitBtn.disabled = true;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/comments`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify({ fic_id: 'vi-fic-' + currentFic, name, body })
+    });
+    if (!res.ok) throw new Error();
+    textInput.value = '';
+    fetchComments();
+  } catch(e) {
+    alert('Không thể gửi bình luận. Vui lòng thử lại.');
+  }
+  submitBtn.textContent = 'Gửi bình luận →';
+  submitBtn.disabled = false;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
 </script>
 </body>
 </html>
