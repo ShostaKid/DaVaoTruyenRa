@@ -437,6 +437,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <div class="fic-summary"><p>"Ba đóa ly lớn, ba đóa ly lớn trên nấm mồ không thánh giá,</p><p>Ba đóa ly lớn mà gió và mưa đã làm cho băng giá</p><p>Đang chìm vào giấc ngủ, như ba mối tình tôi đã đập vỡ tan."</p></div>
           <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
         </div>
+        <div class="fic-card" onclick="openFic(12)" data-fandom="Arknights">
+          <div class="fic-title">Dạ khúc số 2 giọng Mi giáng trưởng: <em>"Dịu dàng"</em></div>
+          <div class="fic-meta"><span>Arknights</span></div>
+          <div class="fic-summary"><p>- Đồ ăn gian.</p><p>- Xem ai cố tình tạo ra tình huống này ngay từ đầu nói kìa.</p></div>
+          <div class="fic-tags"><span class="tag">Amiya/W</span></div>
+        </div>
       </div><!-- /.works-main -->
     </div><!-- /.works-layout -->
     <footer><span style="color:var(--gold);">✦</span> &nbsp; Kiểu nó phải thế &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -480,7 +486,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <div class="section-heading" style="margin-top:1rem;">Giới thiệu</div>
       <div class="about-body">
         <p>Xin chào, chắc là một số người đã từng biết tới tôi qua cái tên "Đá vào truyện ra", cơ mà từ giờ tôi sẽ viết dưới cái tên <strong>ShostaKid</strong>, còn tên này nghĩa là gì thì các bạn có thể thể tự tra Google hoặc ChatGPT:)</p>
-        <p>Tôi viết mọi thứ tôi thích, làm mọi thứ tôi muốn ở đây. Đừng hỏi tại sao vì tôi thích thế:) Đọc xong thích thì comment cho tôi biết nhé!</p>
+        <p>Tôi viết mọi thứ tôi thích, làm mọi thứ tôi muốn ở đây. Đừng hỏi tại sao vì tôi thích thế:).</p>
         <p>Tôi chủ yếu viết cho vài fandom như <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> và đôi khi có cả <em>Genshin Impact</em>. Sau này thêm cái gì sẽ bổ sung sau</p>
         <p>Không có gì nhiều để nói và giới thiệu nữa, nên thôi chúc các bạn tìm thấy được thứ gì đó thú vị ở đây. Cảm ơn vi da den</p>
       </div>
@@ -649,6 +655,17 @@ const fics = [
     musicName: 'Shostakovich — Symphonyh no.14',
     files: ['Dirge no1.txt'], chapters: ['Chapter 1']
   },
+  {
+    title: 'Dạ khúc số 2 giọng Mi giáng trưởng', subtitle: 'Dịu dàng',
+    fandom: 'Arknights',
+    warning: null,
+    summary: '- Đồ ăn gian.<br>- Xem ai cố tình tạo ra tình huống này ngay từ đầu nói kìa.',
+    tags: ['Amiya/W'],
+    date: '2026-06-10', featured: true,
+    music: { source: 'musopen', url: 'https://dl.musopen.org/recordings/586da022-00a5-459d-a401-9abff984f964.mp3?filename=Nocturne%20in%20C%20sharp%20minor%20%27Lento%20con%20gran%20espressione%27%2C%20B.%2049%20%28Op.%20posth.%29.mp3', start:0 },
+    musicName: 'Federic Chopin-Nocturne in C Sharp Minor',
+    files: ['Nocturne A9.txt'], chapters: ['Chapter 1']
+  },
 ];
 
 // =============================================
@@ -722,6 +739,7 @@ function buildSidebar() {
     'Reverse: 1999': 'Reverse: 1999',
     'Figure Skating': 'Figure Skating RPF',
     'Honkai': 'Honkai: Star Rail'
+    'Arknights'
   };
   const fandomShips = {};
   document.querySelectorAll('#page-works .fic-card').forEach(card => {
