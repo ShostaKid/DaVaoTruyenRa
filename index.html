@@ -1024,7 +1024,7 @@ function playMusicDirect(source, url, id, start, end, name) {
   stopMusic();
   const m = { source, url, id, start, end };
 
-  if (source === 'musopen' || source === 'archive') {
+  if (source === 'musopen' || source === 'archive' || source === 'github') {
     const audio = document.createElement('audio');
     audio.id = 'audio-player';
     audio.loop = true;
