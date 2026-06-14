@@ -508,8 +508,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 // FIC DATA — chỉnh sửa phần này khi thêm truyện
 // =============================================
 const aboutMusic = {
-  source: 'archive',     
-  url: 'https://archive.org/download/shostakovich-symphony-7/Shostakovich%20Symphony%207.mp3',         // link nhạc
+  source: 'github',     
+  url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Shostakovich.Symphony.7.mp3',         // link nhạc
   start: 0,
   name: 'Shostakovich - Symphony no.7 "Leningrad"'
 };
@@ -522,7 +522,7 @@ const fics = [
     summary: 'Họ nắm tay nhau, và nhảy một điệu cuối cùng',
     tags: ['Phainon/Cyrene'],
     date: '2026-05-22', featured: false,
-    music: { source: 'archive', url: 'https://archive.org/download/TCHAIKOVSKYNutcrackerBalletcomplete/20.PasDeDeux.mp3', start: 0 },
+    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Pas.de.Deux.mp3', start: 0 },
     musicName: 'Tchaikovsky — Pas de Deux',
     files: ['Pas de deux.txt'], chapters: ['Chapter 1']
   },
@@ -533,7 +533,7 @@ const fics = [
     summary: 'Đại khái là NTR',
     tags: ['Aleph/Recoleta', 'Merlin/Recoleta'],
     date: '2026-05-22', featured: false,
-    music: { source: 'archive', url: 'https://archive.org/download/StringQuartetNo.8InCMinor/Quartet%20No.%208%20in%20C%20minor.mp3', start: 295 },
+    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/String.quartet.no.8.mp3', start: 0 },
     musicName: 'Shostakovich — String Quartet No. 8',
     files: ['String Quartet no.8.txt'], chapters: ['Chapter 1']
   },
@@ -544,7 +544,7 @@ const fics = [
     summary: '"Nhưng cái đẩy đó lại biến thành cái nắm lấy vạt áo anh và kéo anh lại gần cô hơn, còn tiếng quát lại trở thành một tiếng rên rỉ nhỏ."',
     tags: ['Corvus/Pyrrhos'],
     date: '2026-05-25', featured: false,
-    music: { source: 'archive', url: 'https://archive.org/download/41FranzLisztMazeppa1852/41%20Franz%20Liszt%20-%20Mazeppa%2C%201852.mp3', start: 0 },
+    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Etude.no4.Liszt.mp3', start: 0 },
     musicName: 'Liszt — Etude no.4 in D minor',
     files: ['Fantasia no.1.txt'], chapters: ['I. Desires']
   },
@@ -607,8 +607,8 @@ const fics = [
     summary: 'Hai đứa này làm cái gì đó khó nói ở nơi công cộng',
     tags: ['Phainon/Cyrene'],
     date: '2026-06-04', featured: false,
-    music: { source: 'archive', url: 'https://archive.org/download/41FranzLisztMazeppa1852/41%20Franz%20Liszt%20-%20Mazeppa%2C%201852.mp3', start: 0 },
-    musicName: 'Liszt — Etude no.4 in D minor',
+    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Infernale.Danse.mp3', start: 0 },
+    musicName: 'Stravinsky - Infernal dance',
     files: ['Impromptu no.1.txt'], chapters: ['Chapter 1']
   },
   {
@@ -618,8 +618,8 @@ const fics = [
     summary: 'Cyrene đi chơi với người "bạn thân" Khaslana. Ít nhất thì đó là những gì Phainon nghĩ',
     tags: ['Phainon/Cyrene', 'Khaslana/Cyrne'],
     date: '2026-06-04', featured: false,
-    music: { source: 'archive', url: 'https://archive.org/download/FirebirdSuite1919Iv.InfernalDancegiulini-chicago/4-07Stravinsky__theFirebird_Suite19194.DanceOfKingKastchei.mp3', start: 0 },
-    musicName: 'Stravinsky - Infernal Dance',
+    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Lady.Macbeth.Katena.Sergei.1.mp3', start: 0 },
+    musicName: 'Shostakovich - Lady Macbeth von Mzensk',
     files: ['Impromptu no.2.txt'], chapters: ['Chapter 1']
   },
   {
@@ -651,7 +651,7 @@ const fics = [
     summary: 'Ba đóa ly lớn, ba đóa ly lớn trên nấm mồ không thánh giá,<br>Ba đóa ly lớn mà gió và mưa đã làm cho băng giá<br>Đang chìm vào giấc ngủ, như ba mối tình tôi đã đập vỡ tan.',
     tags: ['Phainon/Cyrene'],
     date: '2026-06-09', featured: false,
-    music: { source: 'archive', url: 'https://archive.org/download/symphony-no.-14_202010/04-The%20Suicide.mp3', start:0 },
+    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Le.Sucide.mp3', start:0 },
     musicName: 'Shostakovich — Symphonyh no.14',
     files: ['Dirge no1.txt'], chapters: ['Chapter 1']
   },
@@ -1068,7 +1068,7 @@ function playMusicDirect(source, url, id, start, end, name) {
 
   const source = m.source || 'youtube';
 
-  if (source === 'musopen' || source === 'archive') {
+  if (source === 'musopen' || source === 'archive' || source === 'github') {
     // HTML5 audio — direct MP3 link từ musopen.org hoặc archive.org
     const audio = document.createElement('audio');
     audio.id = 'audio-player';
