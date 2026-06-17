@@ -52,7 +52,8 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .nav-links a{font-family:'Nunito',sans-serif;font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
 .nav-links a:hover,.nav-links a.active{color:var(--gold);}
 
-
+#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:'Nunito',sans-serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
+#music-bar.hidden{display:none;}
 .music-now{display:flex;align-items:center;gap:8px;flex:1;}
 .music-bars{display:flex;align-items:flex-end;gap:2px;height:14px;}
 .music-bars span{width:2px;background:var(--gold);border-radius:1px;animation:bar 0.8s ease-in-out infinite;}
@@ -129,7 +130,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .about-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
 .about-ornament{text-align:center;font-family:'Nunito',sans-serif;font-size:3.5rem;color:var(--gold);opacity:0.25;margin-bottom:-1rem;}
 .about-body{font-family:'Lora',Georgia,serif;font-size:1.08rem;line-height:1.9;color:var(--ink2);}
-
+.about-body p{margin-bottom:1.4em;}
 .about-sig{font-family:'Nunito',sans-serif;font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:2.5rem;}
 .stat-row{display:flex;gap:2rem;margin:2.5rem 0;flex-wrap:wrap;}
 .stat-box{text-align:center;padding:1.2rem 1.8rem;border:1px solid var(--border);background:rgba(250,247,240,0.7);}
@@ -345,13 +346,13 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
             <span class="mobile-filter-label">Ship</span>
             <div class="mobile-filter-pills" id="mobile-ship-list"></div>
           </div>
-   
+        </div>
         <div style="margin-bottom:1.5rem;position:relative;">
   <input id="search-input" type="text" placeholder="Tìm theo tên truyện..."
     oninput="searchFics(this.value)"
     style="width:100%;font-family:'Nunito',sans-serif;font-size:0.85rem;letter-spacing:1px;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:10px 16px 10px 40px;outline:none;transition:border-color 0.2s;">
   <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:0.9rem;">🔍</span>
-
+</div>
         <div class="section-heading">Tất cả truyện</div>
         <div class="fic-card" onclick="openFic(0)" data-fandom="Honkai">
           <div class="fic-title">Khúc bi ca số 1 giọng Sol trưởng: <em>"Điệu nhảy đôi"</em></div>
@@ -418,7 +419,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <div class="fic-tags"><span class="tag">Phainon/Cyrene</span><span class="tag">Khaslana/Cyrene</span></div>
         </div>
 
-
+        <div class="fic-card" onclick="openFic(9)" data-fandom="Honkai">
           <div class="fic-title">Khúc ngẫu hứng số 3 giọng Rê giáng trưởng: <em>"Lòng tốt"</em></div>
           <div class="fic-meta"><span>Honkai: Star Rail</span></div>
           <div class="fic-summary">Kiểu nó là ngẫu hứng</div>
@@ -719,16 +720,21 @@ function applyFilters() {
 function setFandom(fandom, btn, isMobile) {
   activeFandom = fandom;
   if (fandom === 'all') {
-Selector('.all-btn')?.classList.remove('active');
+    document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
+    document.querySelector('.all-btn')?.classList.add('active');
+  } else {
+    document.querySelector('.all-btn')?.classList.remove('active');
   }
   document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
     const inShip = document.getElementById('mobile-ship-list')?.contains(b);
     if (!inShip) {
-
+      b.classList.toggle('active', fandom === 'all' ? b.textContent.trim() === 'Tất cả' : b.textContent.includes(fandom));
+    }
+  });
   if (btn) btn.classList.add('active');
   activeShips.clear();
   document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => b.classList.remove('active'));
-
+  updateMobileFilterCount();
   applyFilters();
 }
 
